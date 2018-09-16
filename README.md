@@ -1,10 +1,6 @@
-colyseus-examples
+colyseus-rooms-api
+
 ===
-
-Official Colyseus Examples.
-
-- [See live](http://colyseus-examples.herokuapp.com/)
-- [See monitor](http://colyseus-examples.herokuapp.com/colyseus)
 
 Consider backing Colyseus development and its support on Patreon.
 
@@ -14,8 +10,8 @@ How to run
 ---
 
 ```
-git clone https://github.com/gamestdio/colyseus-examples.git
-cd colyseus-examples
+git clone https://github.com/terranblake/ColyseusRoomsAPI.git
+cd colyseus-rooms-api
 npm install
 npm run bundle-colyseus-client
 npm start
@@ -28,8 +24,8 @@ Deployment for prototyping
 
 You can easily deploy Colyseus on Heroku and Zeit Now.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/gamestdio/colyseus-examples)
-[![Deploy to now](https://deploy.now.sh/static/button.svg)](https://deploy.now.sh/?repo=https://github.com/gamestdio/colyseus-examples)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/terranblake/ColyseusRoomsAPI)
+[![Deploy to now](https://deploy.now.sh/static/button.svg)](https://deploy.now.sh/?repo=https://github.com/terranblake/ColyseusRoomsAPI)
 
 Links
 ---
