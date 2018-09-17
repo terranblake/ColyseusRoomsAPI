@@ -37,7 +37,7 @@ const deleteRoom = async (body, res, dbPromise) => {
     let foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}`);
 
     if (foundRoom) {
-        await db.get(`DELETE FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}`)
+        await db.get(`DELETE FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`)
 
         res.status(200).send({ message: 'deleted room', error: null })
     } else {
