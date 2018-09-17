@@ -34,7 +34,7 @@ const deleteRoom = async (body, res, dbPromise) => {
     let { id, scene, zone } = body;
 
     let db = await dbPromise;
-    let foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}`);
+    let foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`);
 
     if (foundRoom) {
         await db.get(`DELETE FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`)
