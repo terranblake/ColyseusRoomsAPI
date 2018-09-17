@@ -1,9 +1,16 @@
 <ul>
     {{#each this}}
-    <div class="card text-center">
+    {{#if scene}}
+    <div class="col col-3 card text-center" style="margin: 0.5%">
         <div class="card-body">
-            <h5 class="card-title">{{scene}}_{{zone}}#{{id}} : Max of <i>{{maxSize}} players</i></h5>
+            <p class="card-text"><i>{{scene}}_{{zone}}#{{id}}</i></p>
+        </div>
+        <div class="card-footer text-muted">
+            {{!-- Created:&#09;{{createdAt}} --}}
+            <br />
+            {{!-- Updated:&#09;{{updatedAt}} --}}
         </div>
     </div>
+    {{/if}}
     {{/each}}
 </ul>

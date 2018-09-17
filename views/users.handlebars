@@ -1,16 +1,17 @@
-<ul>
+<div class="row">
     {{#each this}}
-    <div class="card text-center">
-        {{!-- <div class="card-header">
-            {{displayName}}
-        </div> --}}
+    {{#if playfabId}}
+    <div class="col col-3 card text-center" style="margin: 0.5%">
         <div class="card-body">
             <h5 class="card-title">{{displayName}} : <i>{{playfabId}}</i></h5>
-            <p class="card-text">Room: <i>{{roomScene}}_{{roomZone}}#{{roomId}}</i></p>
+            <p class="card-text"><i>{{roomScene}}_{{roomZone}}#{{roomId}}</i></p>
         </div>
         <div class="card-footer text-muted">
-            Last Updated: {{updatedAt}}
+            Created:&#09;{{createdAt}}
+            <br />
+            Updated:&#09;{{updatedAt}}
         </div>
     </div>
+    {{/if}}
     {{/each}}
-</ul>
+</div>
