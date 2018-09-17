@@ -13,31 +13,31 @@ const getRooms = async (res, dbPromise) => {
 }
 
 const createRoom = async (body, res, dbPromise) => {
-    let { id, scene, maxSize, type } = body;
+    let { id, scene, zone, maxSize, type } = body;
 
-    if (id && scene && type) {
+    if (id && scene && zone && type) {
         const db = await dbPromise;
-        const foundRoom = await db.get(`SELECT id, scene FROM Room WHERE id = '${id}' AND scene = '${scene}'`);
+        const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`);
 
         if (!foundRoom) {
-            await db.get(`INSERT INTO Room (id, scene, maxSize, type) VALUES ('${id}', '${scene}', '${maxSize}', '${type}');`)
+            await db.get(`INSERT INTO Room (id, scene, zone, maxSize, type) VALUES ('${id}', '${scene}', '${zone}' '${maxSize}', '${type}');`)
 
             res.status(200).send({ message: 'created new room', error: 0 });
         } else {
             res.status(400).send({ message: 'room with the same id and scene already exists', error: 1 });
         }
     } else
-        res.status(400).send({ message: 'id, scene and type are required to create a new room', error: 1 });
+        res.status(400).send({ message: 'id, scene, zone and type are required to create a new room', error: 1 });
 }
 
 const deleteRoom = async (body, res, dbPromise) => {
-    let { id, scene } = body;
+    let { id, scene, zone } = body;
 
     let db = await dbPromise;
-    let foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}'`);
+    let foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}`);
 
     if (foundRoom) {
-        await db.get(`DELETE FROM Room WHERE id = '${id}' AND scene = '${scene}'`)
+        await db.get(`DELETE FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}`)
 
         res.status(200).send({ message: 'deleted room', error: null })
     } else {

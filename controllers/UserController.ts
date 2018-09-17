@@ -32,12 +32,13 @@ const createUser = async (body, res, dbPromise) => {
 }
 
 const updateUser = async (body, res, dbPromise) => {
-    let { playfabId, isOnline, roomId, roomScene } = body;
+    let { playfabId, isOnline, roomId, roomScene, roomZone } = body;
 
     try {
         const db = await dbPromise;
-        const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${roomId}' AND scene = '${roomScene}'`);
+        const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${roomId}' AND scene = '${roomScene}' AND zone = '${roomZone}'`);
         const foundUser = await db.get(`SELECT playfabId FROM User WHERE playfabId = '${playfabId}'`);
+        const dateNow = Date.now();
 
         if (foundRoom && foundUser) {
             await db.get(`       \
@@ -45,12 +46,13 @@ const updateUser = async (body, res, dbPromise) => {
                 SET isOnline = '${isOnline}',   \
                     roomId = '${roomId}',       \
                     roomScene = '${roomScene}'  \
-                    updatedAt = '${Date.now()}' \
+                    roomZone = '${roomZone}'    \
+                    updatedAt = '${dateNow}' \
                 WHERE                           \
                     playfabId = '${playfabId}'  \
             `);
 
-            res.status(200).send({ message: 'updated user data', error: null, user: { playfabId, isOnline, roomId, roomScene } });
+            res.status(200).send({ message: 'updated user data', error: null, user: { playfabId, isOnline, roomId, roomScene, roomZone } });
         }
         else
             res.status(400).send({ message: null, error: 'room and/or user does not exist', playfabId, roomId, roomScene });
