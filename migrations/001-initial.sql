@@ -13,9 +13,9 @@ CREATE TABLE IF NOT EXISTS User (
 );
 
 CREATE TABLE Room (
-  id            INTEGER PRIMARY KEY,
+  id            TEXT PRIMARY KEY,
   scene         TEXT NOT NULL,
-  maxSize       INT NOT NULL,
+  maxSize       TEXT NOT NULL,
   type          TEXT NOT NULL,
   createdAt     TEXT,
   updatedAt     TEXT

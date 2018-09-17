@@ -36,8 +36,8 @@ const updateUser = async (body, res, dbPromise) => {
 
     try {
         const db = await dbPromise;
-        const foundRoom = await db.get(`SELECT ? FROM Room WHERE id = ? AND scene = ?`, 'id', roomId, roomScene);
-        const foundUser = await db.get(`SELECT ? FROM User WHERE playfabId = ?`, 'playfabId', playfabId);
+        const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${roomId}' AND scene = '${roomScene}'`);
+        const foundUser = await db.get(`SELECT playfabId FROM User WHERE playfabId = '${playfabId}'`);
 
         if (foundRoom && foundUser) {
             await db.get(`       \
@@ -49,10 +49,10 @@ const updateUser = async (body, res, dbPromise) => {
                     playfabId = '${playfabId}'  \
             `);
 
-            res.status(200).send({ result: 'updated user data', error: null, user: { playfabId, isOnline, roomId, roomScene } });
+            res.status(200).send({ message: 'updated user data', error: null, user: { playfabId, isOnline, roomId, roomScene } });
         }
         else
-            res.status(400).send({ result: null, error: 'room and/or user does not exist', playfabId, roomId, roomScene });
+            res.status(400).send({ message: null, error: 'room and/or user does not exist', playfabId, roomId, roomScene });
     } catch (err) {
         throw err;
     }
