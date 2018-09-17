@@ -21,7 +21,24 @@ const createUser = async (body, res, dbPromise) => {
 
         // `INSERT INTO users (playfabid, name, room) VALUES ('123456', 'test', 'temp');`
         if (!user) {
-            const user = await db.get(`INSERT INTO User (playfabid, displayName, createdAt, updatedAt) values ('${playfabId}', '${displayName}', '${Date.now()}', '${Date.now()}')`);
+            const queryString = `
+                INSERT INTO User 
+                (
+                    playfabid, 
+                    displayName, 
+                    createdAt, 
+                    updatedAt
+                ) 
+                VALUES 
+                (
+                    '${playfabId}', 
+                    '${displayName}', 
+                    '${Date.now()}', 
+                    '${Date.now()}'
+                )
+            `;
+
+            const user = await db.get();
             res.status(200).send({ message: 'added new user to database', error: null, user: { playfabId, displayName } });
         }
         else
@@ -40,17 +57,21 @@ const updateUser = async (body, res, dbPromise) => {
         const foundUser = await db.get(`SELECT playfabId FROM User WHERE playfabId = '${playfabId}'`);
         const dateNow = Date.now();
 
+        const queryString = `
+            UPDATE User
+            SET isOnline =  '${isOnline}',
+                roomId =    '${roomId}',
+                roomScene = '${roomScene}',
+                roomZone =  '${roomZone}',
+                updatedAt = '${dateNow}'
+            WHERE
+                playfabId = '${playfabId}'
+        `;
+
+        console.log(queryString);
+
         if (foundRoom && foundUser) {
-            await db.get(`       \
-                UPDATE User                     \
-                SET isOnline = '${isOnline}',   \
-                    roomId = '${roomId}',       \
-                    roomScene = '${roomScene}'  \
-                    roomZone = '${roomZone}'    \
-                    updatedAt = '${dateNow}' \
-                WHERE                           \
-                    playfabId = '${playfabId}'  \
-            `);
+            await db.get(queryString);
 
             res.status(200).send({ message: 'updated user data', error: null, user: { playfabId, isOnline, roomId, roomScene, roomZone } });
         }

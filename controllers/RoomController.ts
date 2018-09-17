@@ -20,7 +20,7 @@ const createRoom = async (body, res, dbPromise) => {
         const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`);
 
         if (!foundRoom) {
-            await db.get(`INSERT INTO Room (id, scene, zone, maxSize, type) VALUES ('${id}', '${scene}', '${zone}' '${maxSize}', '${type}');`)
+            await db.get(`INSERT INTO Room (id, scene, zone, maxSize, type) VALUES ('${id}', '${scene}', '${zone}', '${maxSize}', '${type}');`)
 
             res.status(200).send({ message: 'created new room', error: 0 });
         } else {
