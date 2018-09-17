@@ -4,9 +4,9 @@ const getUsers = async (res, dbPromise) => {
         const users = await db.all(`SELECT * FROM User`);
 
         if (users)
-            res.status(200).send({ message: 'retrieved all users', users })
+            res.status(200).send({ message: 'retrieved all users', error: null, users })
         else
-            res.status(400).send({ message: 'no users found', users })
+            res.status(400).send({ message: 'no users found', error: null, users })
     } catch (err) {
         throw err;
     }
@@ -22,10 +22,10 @@ const createUser = async (body, res, dbPromise) => {
         // `INSERT INTO users (playfabid, name, room) VALUES ('123456', 'test', 'temp');`
         if (!user) {
             const user = await db.get(`INSERT INTO User (playfabid, displayName, createdAt, updatedAt) values ('${playfabId}', '${displayName}', '${Date.now()}', '${Date.now()}')`);
-            res.status(200).send({ message: 'added new user to database', user: { playfabId, displayName } });
+            res.status(200).send({ message: 'added new user to database', error: null, user: { playfabId, displayName } });
         }
         else
-            res.status(400).send({ message: 'that user already exists' })
+            res.status(400).send({ message: null, error: 'that user already exists' })
     } catch (err) {
         throw err;
     }
@@ -45,6 +45,7 @@ const updateUser = async (body, res, dbPromise) => {
                 SET isOnline = '${isOnline}',   \
                     roomId = '${roomId}',       \
                     roomScene = '${roomScene}'  \
+                    updatedAt = '${Date.now()}' \
                 WHERE                           \
                     playfabId = '${playfabId}'  \
             `);
