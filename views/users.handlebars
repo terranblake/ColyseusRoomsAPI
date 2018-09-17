@@ -1,0 +1,16 @@
+<ul>
+    {{#each this}}
+    <div class="card text-center">
+        {{!-- <div class="card-header">
+            {{displayName}}
+        </div> --}}
+        <div class="card-body">
+            <h5 class="card-title">{{displayName}} : <i>{{playfabId}}</i></h5>
+            <p class="card-text">Room: <i>{{roomScene}}_{{roomZone}}#{{roomId}}</i></p>
+        </div>
+        <div class="card-footer text-muted">
+            Last Updated: {{updatedAt}}
+        </div>
+    </div>
+    {{/each}}
+</ul>

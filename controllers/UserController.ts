@@ -38,7 +38,7 @@ const createUser = async (body, res, dbPromise) => {
                 )
             `;
 
-            const user = await db.get(queryString);
+            await db.get(queryString);
             res.status(200).send({ message: 'added new user to database', error: null, user: { playfabId, displayName } });
         }
         else
@@ -68,11 +68,8 @@ const updateUser = async (body, res, dbPromise) => {
                 playfabId = '${playfabId}'
         `;
 
-        console.log(queryString);
-
         if (foundRoom && foundUser) {
             await db.get(queryString);
-
             res.status(200).send({ message: 'updated user data', error: null, user: { playfabId, isOnline, roomId, roomScene, roomZone } });
         }
         else

@@ -21,7 +21,6 @@ const createRoom = async (body, res, dbPromise) => {
 
         if (!foundRoom) {
             await db.get(`INSERT INTO Room (id, scene, zone, maxSize, type) VALUES ('${id}', '${scene}', '${zone}', '${maxSize}', '${type}');`)
-
             res.status(200).send({ message: 'created new room', error: 0 });
         } else {
             res.status(400).send({ message: 'room with the same id and scene already exists', error: 1 });
@@ -38,7 +37,6 @@ const deleteRoom = async (body, res, dbPromise) => {
 
     if (foundRoom) {
         await db.get(`DELETE FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`)
-
         res.status(200).send({ message: 'deleted room', error: null })
     } else {
         res.status(400).send({ message: 'could not find room', error: 1 })

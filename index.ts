@@ -12,6 +12,7 @@ import { ChatRoom } from "./rooms/01-chat-room";
 import { StateHandlerRoom } from "./rooms/02-state-handler";
 import { AuthRoom } from "./rooms/03-auth";
 import { DefaultRoom } from "./rooms/default-room";
+import * as exphbs from 'express-handlebars';
 
 const port = Number(process.env.PORT || 2567);
 const app = express();
@@ -47,6 +48,9 @@ gameServer.register("default_room", DefaultRoom);
 //   });
 // });
 
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use('/', express.static(path.join(__dirname, "static")));
@@ -55,6 +59,9 @@ app.use('/colyseus', monitor(gameServer));
 // API ROUTES
 app.use('/api', require('./routes/room')(express, dbPromise));
 app.use('/api', require('./routes/user')(express, dbPromise));
+
+// VIEW ROUTES
+app.use('/', require('./routes/views')(express, dbPromise));
 
 gameServer.onShutdown(function () {
   console.log(`game server is going down.`);
