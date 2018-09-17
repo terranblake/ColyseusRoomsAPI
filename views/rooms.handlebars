@@ -1,4 +1,4 @@
-<ul>
+<div class="row">
     {{#each this}}
     {{#if scene}}
     <div class="col col-3 card text-center" style="margin: 0.5%">
@@ -6,11 +6,11 @@
             <p class="card-text"><i>{{scene}}_{{zone}}#{{id}}</i></p>
         </div>
         <div class="card-footer text-muted">
-            {{!-- Created:&#09;{{createdAt}} --}}
+            {{maxSize}}
             <br />
-            {{!-- Updated:&#09;{{updatedAt}} --}}
+            {{type}}
         </div>
     </div>
     {{/if}}
     {{/each}}
-</ul>
+</div>
