@@ -38,7 +38,7 @@ const createUser = async (body, res, dbPromise) => {
                 )
             `;
 
-            const user = await db.get();
+            const user = await db.get(queryString);
             res.status(200).send({ message: 'added new user to database', error: null, user: { playfabId, displayName } });
         }
         else
