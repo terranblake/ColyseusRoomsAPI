@@ -17,6 +17,8 @@ module.exports = (express, dbPromise) => {
         .put(async (req, res) => {
             console.log('PUT    /api/user - update user')
 
+            console.log('RAW BODY ', req.rawBody);
+
             updateUser(req.body, res, dbPromise);
         });
 
