@@ -17,7 +17,7 @@ const createUser = async (body, res, dbPromise) => {
 
     try {
         const db = await dbPromise;
-        const user = await db.get(`SELECT playfabid FROM User WHERE playfabid = '${playfabId}'`);
+        const user = await db.get(`SELECT playfabId FROM User WHERE playfabId = '${playfabId}'`);
 
         // `INSERT INTO users (playfabid, name, room) VALUES ('123456', 'test', 'temp');`
         if (!user) {
