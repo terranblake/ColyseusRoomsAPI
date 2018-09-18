@@ -5,7 +5,6 @@ import { createServer } from 'http';
 import { Server } from 'colyseus';
 import { monitor } from '@colyseus/monitor';
 import * as sqlite from 'sqlite';
-const Promise = require('bluebird').Promise;
 
 // Import demo room handlers
 import { ChatRoom } from "./rooms/01-chat-room";
@@ -14,9 +13,10 @@ import { AuthRoom } from "./rooms/03-auth";
 import { DefaultRoom } from "./rooms/default-room";
 import * as exphbs from 'express-handlebars';
 
-const port = Number(process.env.PORT || 3000);
+const port = Number(process.env.PORT || 2567);
 const app = express();
 
+const Promise = require('bluebird').Promise;
 const dbPromise = Promise.resolve()
   .then(() => sqlite.open('./db.sqlite', { promise: Promise }))
   .then(db => db.migrate({ force: 'last' }));
@@ -55,7 +55,6 @@ app.use('/api', require('./routes/user')(express, dbPromise));
 
 // VIEW ROUTES
 app.use('/', require('./routes/views')(express, dbPromise));
-
 
 gameServer.listen(port);
 console.log(`Listening on http://localhost:${port}`);

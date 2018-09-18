@@ -55,10 +55,14 @@ const createUser = async (body, dbPromise) => {
 const updateUser = async (body, dbPromise) => {
     let { playfabId, isOnline, roomId, roomScene, roomZone } = body;
 
+    console.log({
+        updateUser: body
+    });
+
     try {
         const db = await dbPromise;
         const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${roomId}' AND scene = '${roomScene}' AND zone = '${roomZone}'`);
-        const foundUser = await getUser("playfabId", body.playfabId, dbPromise);
+        const foundUser = await getUser("playfabId", playfabId, dbPromise);
         const dateNow = Date.now();
 
         if (foundRoom && foundUser) {

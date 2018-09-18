@@ -1,4 +1,4 @@
-import { Room } from '../controllers';
+import { RoomActions } from '../controllers';
 
 module.exports = (express, dbPromise) => {
     const router = express.Router();
@@ -6,7 +6,7 @@ module.exports = (express, dbPromise) => {
     router.route('/room')
         .get(async (req, res) => {
             console.log('GET        /api/room   -   get all rooms')
-            const rooms = await Room.getAllRooms(dbPromise);
+            const rooms = await RoomActions.getAllRooms(dbPromise);
 
             if (rooms)
                 res.status(200).send({ message: 'retrieved all rooms', error: null })
@@ -15,7 +15,7 @@ module.exports = (express, dbPromise) => {
         })
         .post(async (req, res) => {
             console.log('POST       /api/room   -   create room')
-            const result = await Room.createRoom(req.body, dbPromise);
+            const result = await RoomActions.createRoom(req.body, dbPromise);
 
             if (result == 2)
                 res.status(400).send({ message: null, error: 'scene, zone, id and type are required' });
@@ -26,7 +26,7 @@ module.exports = (express, dbPromise) => {
         })
         .delete(async (req, res) => {
             console.log('DELETE     /api/room   -   delete room')
-            const result = await Room.deleteRoom(req.body, dbPromise);
+            const result = await RoomActions.deleteRoom(req.body, dbPromise);
 
             if (result == 1)
                 res.status(400).send({ message: 'could not find room', error: 1 })
@@ -34,21 +34,10 @@ module.exports = (express, dbPromise) => {
                 res.status(200).send({ message: 'deleted room', error: null })
         })
 
-    // router.route('/room/:scene/:zone/:type')
-    //     .get(async (req, res) => {
-    //         console.log('GET        /api/room   -   get room by scene/zone/type');
-    //         const room = await Room.getRoom(req.params, dbPromise);
-
-    //         if (room)
-    //             res.status(200).send({ message: 'room found', error: null, data: room })
-    //         else
-    //             res.status(400).send({ message: 'no room found', error: 1 })
-    //     })
-
     router.route('/room/:scene/:zone/:type')
         .get(async (req, res) => {
             console.log('GET        /api/room   -   get room by scene/zone/type');
-            const rooms = await Room.getRooms(req.params, dbPromise);
+            const rooms = await RoomActions.getRooms(req.params, dbPromise);
 
             if (rooms)
                 res.status(200).send({ message: 'room(s) found', error: null, data: rooms })

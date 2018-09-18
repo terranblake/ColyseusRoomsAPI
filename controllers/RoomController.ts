@@ -1,16 +1,3 @@
-// const getRoom = async (params, dbPromise) => {
-//     let { scene, zone, type } = params;
-
-//     try {
-//         const db = await dbPromise;
-//         const room = db.get(`SELECT id FROM Room WHERE scene = '${scene}' AND zone = '${zone}' AND type = '${type}'`);
-
-//         return room ? room : null;
-//     } catch (err) {
-//         throw err;
-//     }
-// }
-
 const getRooms = async (params, dbPromise) => {
     let { scene, zone, type } = params;
 

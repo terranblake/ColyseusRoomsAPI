@@ -1,4 +1,4 @@
-import { User } from '../controllers';
+import { UserActions } from '../controllers';
 
 module.exports = (express, dbPromise) => {
     const router = express.Router();
@@ -6,7 +6,7 @@ module.exports = (express, dbPromise) => {
     router.route('/user')
         .get(async (req, res) => {
             console.log('GET        /api/user   -   get all users')
-            const users = await User.getAllUsers(dbPromise);
+            const users = await UserActions.getAllUsers(dbPromise);
 
             if (users)
                 res.status(200).send({ message: 'retrieved all users', error: null })
@@ -15,7 +15,7 @@ module.exports = (express, dbPromise) => {
         })
         .post(async (req, res) => {
             console.log('POST       /api/user   -   create user')
-            const result = await User.createUser(req.body, dbPromise);
+            const result = await UserActions.createUser(req.body, dbPromise);
 
             if (result == 1)
                 res.status(400).send({ message: null, error: 'that user already exists' })
@@ -24,7 +24,7 @@ module.exports = (express, dbPromise) => {
         })
         .put(async (req, res) => {
             console.log('PUT        /api/user   -   update user')
-            const result = await User.updateUser(req.body, dbPromise);
+            const result = await UserActions.updateUser(req.body, dbPromise);
 
             if (result == 1)
                 res.status(400).send({ message: null, error: 'room and/or user does not exist' });
@@ -35,7 +35,7 @@ module.exports = (express, dbPromise) => {
     router.route('/user/:searchBy/:value')
         .get(async (req, res) => {
             console.log('GET        /api/user   -   get user by playfab id');
-            const user = await User.getUser(
+            const user = await UserActions.getUser(
                 req.params.searchBy,
                 req.params.value,
                 dbPromise

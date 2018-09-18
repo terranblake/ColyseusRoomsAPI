@@ -1,7 +1,7 @@
-import * as User from './UserController';
-import * as Room from './RoomController';
+import * as UserActions from './UserController';
+import * as RoomActions from './RoomController';
 
 export {
-    User,
-    Room
+    UserActions,
+    RoomActions
 }

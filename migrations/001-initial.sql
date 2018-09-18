@@ -23,9 +23,9 @@ CREATE TABLE Room (
   updatedAt     TEXT
 );
 
-INSERT INTO Room (
-  id, scene, zone, maxSize, type
-  ) VALUES (1234, 'Temp', 'Spawn', 15, 'default_room');
+-- INSERT INTO Room (
+--   id, scene, zone, maxSize, type
+--   ) VALUES (1234, 'Temp', 'Spawn', 15, 'default_room');
 
 --------------------------------------------------------------------------------
 -- Down
