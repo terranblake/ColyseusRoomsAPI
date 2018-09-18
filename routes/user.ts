@@ -34,7 +34,7 @@ module.exports = (express, dbPromise) => {
 
     router.route('/user/:searchBy/:value')
         .get(async (req, res) => {
-            console.log('GET        /api/user   -   get user by playfab id');
+            console.log('GET        /api/user   -   get user by property');
             const user = await UserActions.getUser(
                 req.params.searchBy,
                 req.params.value,

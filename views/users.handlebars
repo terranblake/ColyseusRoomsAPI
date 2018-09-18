@@ -3,13 +3,14 @@
     {{#if playfabId}}
     <div class="col col-3 card text-center" style="margin: 0.5%">
         <div class="card-body">
-            <h5 class="card-title">{{displayName}} : <i>{{playfabId}}</i></h5>
+            <h5 class="card-title">{{displayName}}</h5>
             <p class="card-text"><i>{{roomScene}}_{{roomZone}}#{{roomId}}</i></p>
+            <p class="card-text">{{isOnline}}</p>
         </div>
         <div class="card-footer text-muted">
-            Created:&#09;{{createdAt}}
+            Created {{createdAt}}
             <br />
-            Updated:&#09;{{updatedAt}}
+            Updated {{updatedAt}}
         </div>
     </div>
     {{/if}}

@@ -10,10 +10,11 @@ CREATE TABLE IF NOT EXISTS User (
   roomZone      TEXT,
   isOnline      BOOLEAN,
   createdAt     TEXT,
-  updatedAt     TEXT
+  updatedAt     TEXT,
+  hashedPass    TEXT
 );
 
-CREATE TABLE Room (
+CREATE TABLE IF NOT EXISTS Room (
   id            TEXT PRIMARY KEY,
   scene         TEXT NOT NULL,
   zone          TEXT NOT NULL,
@@ -23,9 +24,10 @@ CREATE TABLE Room (
   updatedAt     TEXT
 );
 
--- INSERT INTO Room (
---   id, scene, zone, maxSize, type
---   ) VALUES (1234, 'Temp', 'Spawn', 15, 'default_room');
+-- INSERT INTO Room (id, scene, zone, maxSize, type) VALUES (1234, 'Room', 'Zone', 15, 'default_room');
+-- INSERT INTO User (playfabId, displayName) VALUES (1234, 'display.name');
+
+-- SELECT * FROM User;
 
 --------------------------------------------------------------------------------
 -- Down

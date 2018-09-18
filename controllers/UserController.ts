@@ -12,7 +12,7 @@ const getUser = async (searchBy, value, dbPromise) => {
 const getAllUsers = async (dbPromise) => {
     try {
         const db = await dbPromise;
-        const users = await db.all(`SELECT * FROM User`);
+        const users = await db.all(`SELECT * FROM User;`);
 
         return users ? users : null;
     } catch (err) {
@@ -28,19 +28,7 @@ const createUser = async (body, dbPromise) => {
         const user = await db.get(`SELECT playfabId FROM User WHERE playfabId = '${playfabId}'`);
 
         if (!user) {
-            const queryString = `
-                INSERT INTO User (
-                    playfabid, 
-                    displayName, 
-                    createdAt, 
-                    updatedAt
-                ) 
-                VALUES (
-                    '${playfabId}', 
-                    '${displayName}', 
-                    '${Date.now()}', 
-                    '${Date.now()}'
-                )`;
+            const queryString = `INSERT INTO User (playfabId, displayName, isOnline, createdAt, updatedAt) VALUES ('${playfabId}', '${displayName}', '1', '${Date.now()}', '${Date.now()}');`;
 
             await db.run(queryString);
             return 0;
@@ -54,10 +42,6 @@ const createUser = async (body, dbPromise) => {
 
 const updateUser = async (body, dbPromise) => {
     let { playfabId, isOnline, roomId, roomScene, roomZone } = body;
-
-    console.log({
-        updateUser: body
-    });
 
     try {
         const db = await dbPromise;
