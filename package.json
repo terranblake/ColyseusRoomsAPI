@@ -23,13 +23,8 @@
     "colyseus.js": "^0.9.6",
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
-    "handlebars": "^4.0.12",
-    "handlebars-intl": "^1.1.2",
-    "moment": "^2.22.2",
     "nodemon": "^1.11.0",
-    "serve-index": "^1.8.0",
     "sqlite": "^3.0.0",
-    "sqlite3": "^4.0.2",
     "superagent": "^3.8.1"
   },
   "devDependencies": {

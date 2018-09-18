@@ -1,30 +1,28 @@
+import { User, Room } from '../controllers';
+
 module.exports = (express, dbPromise) => {
     const router = express.Router();
 
     router.route('/')
         .get(async (req, res) => {
-            console.log('GET    /views/ - view home');
+            console.log('GET        /       -   view home');
 
             res.status(200).render('home');
         })
 
     router.route('/users')
         .get(async (req, res) => {
-            console.log('GET    /views/users - view all users');
+            console.log('GET        /users  -   view all users');
 
-            const db = await dbPromise;
-            const users: Object = await db.all('SELECT * FROM User');
-
+            const users = await User.getAllUsers(dbPromise);
             res.status(200).render('users', users);
         })
 
     router.route('/rooms')
         .get(async (req, res) => {
-            console.log('GET    /views/rooms - view all rooms');
+            console.log('GET        /rooms  -   view all rooms');
 
-            const db = await dbPromise;
-            const rooms: Object = await db.all('SELECT * FROM Room');
-
+            const rooms = await Room.getAllRooms(dbPromise);
             res.status(200).render('rooms', rooms);
         })
 

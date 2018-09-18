@@ -14,8 +14,9 @@ import { AuthRoom } from "./rooms/03-auth";
 import { DefaultRoom } from "./rooms/default-room";
 import * as exphbs from 'express-handlebars';
 
-const port = Number(process.env.PORT || 2567);
+const port = Number(process.env.PORT || 3000);
 const app = express();
+
 const dbPromise = Promise.resolve()
   .then(() => sqlite.open('./db.sqlite', { promise: Promise }))
   .then(db => db.migrate({ force: 'last' }));
@@ -36,17 +37,9 @@ gameServer.register("state_handler", StateHandlerRoom);
 gameServer.register("auth", AuthRoom);
 gameServer.register("default_room", DefaultRoom);
 
-// app.use('/api/user', (req, res, next) => {
-//   req.rawBody = '';
-
-//   req.on('data', function (chunk) {
-//     req.rawBody += chunk;
-//   });
-
-//   req.on('end', function () {
-//     next();
-//   });
-// });
+gameServer.onShutdown(() => {
+  console.log(`game server is going down.`);
+});
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
@@ -63,9 +56,6 @@ app.use('/api', require('./routes/user')(express, dbPromise));
 // VIEW ROUTES
 app.use('/', require('./routes/views')(express, dbPromise));
 
-gameServer.onShutdown(function () {
-  console.log(`game server is going down.`);
-});
 
 gameServer.listen(port);
 console.log(`Listening on http://localhost:${port}`);

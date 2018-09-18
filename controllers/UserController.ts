@@ -1,86 +1,91 @@
-const getUsers = async (res, dbPromise) => {
+const getUser = async (searchBy, value, dbPromise) => {
     try {
         const db = await dbPromise;
-        const users = await db.all(`SELECT * FROM User`);
+        const users = await db.all(`SELECT playfabId, displayName FROM User WHERE ${searchBy} = '${value}'`);
 
-        if (users)
-            res.status(200).send({ message: 'retrieved all users', error: null, users })
-        else
-            res.status(400).send({ message: 'no users found', error: null, users })
+        return users ? users : null;
     } catch (err) {
         throw err;
     }
 }
 
-const createUser = async (body, res, dbPromise) => {
+const getAllUsers = async (dbPromise) => {
+    try {
+        const db = await dbPromise;
+        const users = await db.all(`SELECT * FROM User`);
+
+        return users ? users : null;
+    } catch (err) {
+        throw err;
+    }
+}
+
+const createUser = async (body, dbPromise) => {
     let { playfabId, displayName } = body;
 
     try {
         const db = await dbPromise;
         const user = await db.get(`SELECT playfabId FROM User WHERE playfabId = '${playfabId}'`);
 
-        // `INSERT INTO users (playfabid, name, room) VALUES ('123456', 'test', 'temp');`
         if (!user) {
             const queryString = `
-                INSERT INTO User 
-                (
+                INSERT INTO User (
                     playfabid, 
                     displayName, 
                     createdAt, 
                     updatedAt
                 ) 
-                VALUES 
-                (
+                VALUES (
                     '${playfabId}', 
                     '${displayName}', 
                     '${Date.now()}', 
                     '${Date.now()}'
-                )
-            `;
+                )`;
 
-            await db.get(queryString);
-            res.status(200).send({ message: 'added new user to database', error: null, user: { playfabId, displayName } });
+            await db.run(queryString);
+            return 0;
         }
         else
-            res.status(400).send({ message: null, error: 'that user already exists' })
+            return 1;
     } catch (err) {
         throw err;
     }
 }
 
-const updateUser = async (body, res, dbPromise) => {
+const updateUser = async (body, dbPromise) => {
     let { playfabId, isOnline, roomId, roomScene, roomZone } = body;
 
     try {
         const db = await dbPromise;
         const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${roomId}' AND scene = '${roomScene}' AND zone = '${roomZone}'`);
-        const foundUser = await db.get(`SELECT playfabId FROM User WHERE playfabId = '${playfabId}'`);
+        const foundUser = await getUser("playfabId", body.playfabId, dbPromise);
         const dateNow = Date.now();
 
-        const queryString = `
-            UPDATE User
-            SET isOnline =  '${isOnline}',
-                roomId =    '${roomId}',
-                roomScene = '${roomScene}',
-                roomZone =  '${roomZone}',
-                updatedAt = '${dateNow}'
-            WHERE
-                playfabId = '${playfabId}'
-        `;
-
         if (foundRoom && foundUser) {
-            await db.get(queryString);
-            res.status(200).send({ message: 'updated user data', error: null, user: { playfabId, isOnline, roomId, roomScene, roomZone } });
+            const queryString = `
+                UPDATE User
+                SET isOnline =  '${isOnline}',
+                    roomId =    '${roomId}',
+                    roomScene = '${roomScene}',
+                    roomZone =  '${roomZone}',
+                    updatedAt = '${dateNow}'
+                WHERE
+                    playfabId = '${playfabId}'
+            `;
+
+            await db.run(queryString);
+            return 0;
         }
         else
-            res.status(400).send({ message: null, error: 'room and/or user does not exist', playfabId, roomId, roomScene });
+            return 1;
     } catch (err) {
         throw err;
     }
 }
 
 export {
-    getUsers,
+    getUser,
+    getAllUsers,
     createUser,
     updateUser
 }
