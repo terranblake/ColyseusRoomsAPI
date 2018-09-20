@@ -45,6 +45,10 @@ const createUser = async (body, dbPromise) => {
 const updateUser = async (body, dbPromise) => {
     let { playfabId, isOnline, roomId, roomScene, roomZone } = body;
 
+    console.log({
+        to_update: body
+    });
+
     try {
         const db = await dbPromise;
         const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${roomId}' AND scene = '${roomScene}' AND zone = '${roomZone}'`);

@@ -70,6 +70,10 @@ const getAllRooms = async (dbPromise) => {
 const createRoom = async (body, dbPromise) => {
     let { id, scene, zone, maxSize, type } = body;
 
+    console.log({
+        to_create: body
+    });
+
     if (id && scene && zone && type) {
         const db = await dbPromise;
         const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`);
@@ -88,7 +92,7 @@ const deleteRoom = async (body, dbPromise) => {
     let { id, scene, zone } = body;
 
     console.log({
-        deleteRoom: body
+        to_delete: body
     });
 
     let db = await dbPromise;
