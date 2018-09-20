@@ -8,32 +8,36 @@ const getRoom = async (params, dbPromise) => {
         const rooms = await db.all(`SELECT id, maxSize FROM Room WHERE scene = '${scene}' AND zone = '${zone}'`);
 
         console.log(rooms)
+        let roomToJoin;
 
         if (rooms)
             rooms.forEach(async room => {
                 const userCount = await db.all(`SELECT COUNT(*) FROM User WHERE roomScene = '${scene}' AND roomZone = '${zone}'`);
 
                 if (userCount[0]['COUNT(*)'] < parseInt(room.maxSize)) {
-                    updateUser({ playfabId, isOnline: false, roomId: room.id, roomScene: scene, roomZone: zone }, dbPromise);
+                    roomToJoin = { playfabId, isOnline: false, roomId: room.id, roomScene: scene, roomZone: zone };
 
                     console.log({
                         room_not_full: room
                     });
 
-                    return room.scene + "_" + room.zone + "#" + room.id;
+                    return;
                 }
 
                 console.log({
                     room_is_full: room
                 });
             });
-        
-        let newId = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString()
 
-        await createRoom({ id: newId, scene, zone, maxSize: "15", type }, dbPromise);
-        await updateUser({ playfabId, isOnline: false, roomId: newId, roomScene: scene, roomZone: zone }, dbPromise);
+        if (!roomToJoin) {
+            let newId = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString()
 
-        return scene + "_" + zone + "#" + newId;
+            await createRoom({ id: newId, scene, zone, maxSize: "15", type }, dbPromise);
+            roomToJoin = { playfabId, isOnline: false, roomId: newId, roomScene: scene, roomZone: zone };
+        }
+        await updateUser(roomToJoin, dbPromise);
+
+        return scene + "_" + zone + "#" + roomToJoin.roomId;
     } catch (err) {
         throw err;
     }
