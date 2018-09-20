@@ -5,7 +5,7 @@ const getRoom = async (params, dbPromise) => {
     let { playfabId, scene, zone, type } = params;
 
     try {
-        const rooms = await db.all(`SELECT id, maxSize FROM Room WHERE scene = '${scene}' AND zone = '${zone}' AND type = '${type}'`);
+        const rooms = await db.all(`SELECT id, maxSize FROM Room WHERE scene = '${scene}' AND zone = '${zone}'`);
 
         console.log(rooms)
 
@@ -20,12 +20,14 @@ const getRoom = async (params, dbPromise) => {
                 }
             });
 
-        let newId = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString()
+        else {
+            let newId = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString()
 
-        await createRoom({ id: newId, scene, zone, maxSize: "15", type }, dbPromise);
-        await updateUser({ playfabId, isOnline: false, roomId: newId, roomScene: scene, roomZone: zone }, dbPromise);
+            await createRoom({ id: newId, scene, zone, maxSize: "15", type }, dbPromise);
+            await updateUser({ playfabId, isOnline: false, roomId: newId, roomScene: scene, roomZone: zone }, dbPromise);
 
-        return scene + "_" + zone + "#" + newId;
+            return scene + "_" + zone + "#" + newId;
+        }
     } catch (err) {
         throw err;
     }
