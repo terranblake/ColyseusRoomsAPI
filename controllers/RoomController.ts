@@ -16,18 +16,24 @@ const getRoom = async (params, dbPromise) => {
                 if (userCount[0]['COUNT(*)'] < parseInt(room.maxSize)) {
                     updateUser({ playfabId, isOnline: false, roomId: room.id, roomScene: scene, roomZone: zone }, dbPromise);
 
+                    console.log({
+                        room_not_full: room
+                    });
+
                     return room.scene + "_" + room.zone + "#" + room.id;
                 }
+
+                console.log({
+                    room_is_full: room
+                });
             });
+        
+        let newId = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString()
 
-        else {
-            let newId = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString()
+        await createRoom({ id: newId, scene, zone, maxSize: "15", type }, dbPromise);
+        await updateUser({ playfabId, isOnline: false, roomId: newId, roomScene: scene, roomZone: zone }, dbPromise);
 
-            await createRoom({ id: newId, scene, zone, maxSize: "15", type }, dbPromise);
-            await updateUser({ playfabId, isOnline: false, roomId: newId, roomScene: scene, roomZone: zone }, dbPromise);
-
-            return scene + "_" + zone + "#" + newId;
-        }
+        return scene + "_" + zone + "#" + newId;
     } catch (err) {
         throw err;
     }
