@@ -5,22 +5,26 @@ const getRoom = async (params, dbPromise) => {
     let { playfabId, scene, zone, type } = params;
 
     try {
-        const rooms = await db.get(`SELECT id, maxSize FROM Room WHERE scene = '${scene}' AND zone = '${zone}' AND type = '${type}'`);
-        rooms.forEach(room => {
-            const userCount = db.get(`SELECT COUNT(playfabId) FROM User WHERE roomScene = '${scene}' AND roomZone = '${zone}'`);
+        const rooms = await db.all(`SELECT id, maxSize FROM Room WHERE scene = '${scene}' AND zone = '${zone}' AND type = '${type}'`);
 
-            if (parseInt(userCount) < parseInt(room.maxSize)) {
-                updateUser({ playfabId, isOnline: false, roomId: room.id, roomScene: scene, roomZone: zone }, dbPromise);
+        console.log(rooms)
 
-                return room.scene + "_" + room.zone + "#" + room.id;
-            }
-        });
+        if (rooms)
+            rooms.forEach(async room => {
+                const userCount = await db.all(`SELECT COUNT(*) FROM User WHERE roomScene = '${scene}' AND roomZone = '${zone}'`);
+
+                if (userCount[0]['COUNT(*)'] < parseInt(room.maxSize)) {
+                    updateUser({ playfabId, isOnline: false, roomId: room.id, roomScene: scene, roomZone: zone }, dbPromise);
+
+                    return room.scene + "_" + room.zone + "#" + room.id;
+                }
+            });
 
         let newId = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString()
 
-        createRoom({ newId, scene, zone, maxSize: "15", type }, dbPromise);
-        updateUser({ playfabId, isOnline: false, roomId: newId, roomScene: scene, roomZone: zone }, dbPromise);
-        
+        await createRoom({ id: newId, scene, zone, maxSize: "15", type }, dbPromise);
+        await updateUser({ playfabId, isOnline: false, roomId: newId, roomScene: scene, roomZone: zone }, dbPromise);
+
         return scene + "_" + zone + "#" + newId;
     } catch (err) {
         throw err;
@@ -70,6 +74,10 @@ const createRoom = async (body, dbPromise) => {
 
 const deleteRoom = async (body, dbPromise) => {
     let { id, scene, zone } = body;
+
+    console.log({
+        deleteRoom: body
+    });
 
     let db = await dbPromise;
     let foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`);

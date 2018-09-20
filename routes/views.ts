@@ -23,6 +23,8 @@ module.exports = (express, dbPromise) => {
             console.log('GET        /rooms      -   view all rooms');
             const rooms = await RoomActions.getAllRooms(dbPromise);
 
+            console.log(rooms);
+
             res.status(200).render('rooms', rooms);
         })
 

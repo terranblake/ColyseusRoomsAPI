@@ -1,3 +1,5 @@
+import { deleteRoom } from './RoomController';
+
 const getUser = async (searchBy, value, dbPromise) => {
     try {
         const db = await dbPromise;
@@ -46,22 +48,32 @@ const updateUser = async (body, dbPromise) => {
     try {
         const db = await dbPromise;
         const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${roomId}' AND scene = '${roomScene}' AND zone = '${roomZone}'`);
-        const foundUser = await getUser("playfabId", playfabId, dbPromise);
+        const foundUser = await db.get(`SELECT playfabId, roomScene, roomZone, roomId FROM User WHERE playfabId = '${playfabId}'`);
         const dateNow = Date.now();
 
         if (foundRoom && foundUser) {
-            const queryString = `
+            const result = await db.get(`
                 UPDATE User
-                SET isOnline =  '${isOnline}',
+                SET isOnline =  '${parseInt(isOnline) == 1}',
                     roomId =    '${roomId}',
                     roomScene = '${roomScene}',
                     roomZone =  '${roomZone}',
                     updatedAt = '${dateNow}'
                 WHERE
                     playfabId = '${playfabId}'
-            `;
+            `);
 
-            await db.run(queryString);
+            const usersInRoom = await db.all(`
+                SELECT COUNT(*) 
+                FROM User 
+                WHERE 
+                    roomId      = '${foundUser.roomId}' AND 
+                    roomScene   = '${foundUser.roomScene}' AND
+                    roomZone    = '${foundUser.roomZone}'
+            `);
+
+            if (usersInRoom[0]['COUNT(*)'] == 0) await deleteRoom({ id: foundUser.roomId, scene: foundUser.roomScene, zone: foundUser.roomZone }, dbPromise);
+
             return 0;
         }
         else

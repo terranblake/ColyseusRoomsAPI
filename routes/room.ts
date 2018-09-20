@@ -34,7 +34,7 @@ module.exports = (express, dbPromise) => {
                 res.status(200).send({ message: 'deleted room', error: null, rooms: null })
         })
 
-    router.route('/room/:scene/:zone/:type')
+    router.route('/room/:playfabId/:scene/:zone/:type')
         .get(async (req, res) => {
             console.log('GET        /api/room   -   get valid room');
             const room = await RoomActions.getRoom(req.params, dbPromise);
