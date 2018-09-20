@@ -9,13 +9,15 @@ const getRoom = async (params, dbPromise) => {
 
         console.log(rooms)
         let roomToJoin;
+        let foundRoom;
 
         if (rooms)
             rooms.forEach(async room => {
                 const userCount = await db.all(`SELECT COUNT(*) FROM User WHERE roomScene = '${scene}' AND roomZone = '${zone}'`);
 
-                if (userCount[0]['COUNT(*)'] < parseInt(room.maxSize)) {
+                if (userCount[0]['COUNT(*)'] < parseInt(room.maxSize) && foundRoom == false) {
                     roomToJoin = { playfabId, isOnline: false, roomId: room.id, roomScene: scene, roomZone: zone };
+                    foundRoom = true;
 
                     console.log({
                         room_not_full: room
@@ -29,7 +31,7 @@ const getRoom = async (params, dbPromise) => {
                 });
             });
 
-        if (!roomToJoin) {
+        if (foundRoom == false) {
             let newId = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString()
 
             await createRoom({ id: newId, scene, zone, maxSize: "15", type }, dbPromise);
