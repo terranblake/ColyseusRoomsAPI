@@ -9,7 +9,7 @@ const getRoom = async (params, dbPromise) => {
 
         console.log(rooms)
         let roomToJoin;
-        let foundRoom;
+        let foundRoom = false;
 
         if (rooms)
             rooms.forEach(async room => {
