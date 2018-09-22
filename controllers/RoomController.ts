@@ -3,7 +3,7 @@ import { updateUser } from './UserController';
 const getRoom = async (req, dbPromise) => {
     const db = await dbPromise;
     let { scene, zone, type } = req.body;
-    let { playfabId } = req.params.playfabId;
+    let { playfabId } = req.params;
 
     try {
         const rooms = await db.all(`SELECT * FROM Room WHERE scene = '${scene}' AND zone = '${zone}'`);

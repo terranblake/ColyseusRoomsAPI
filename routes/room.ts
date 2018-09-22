@@ -34,9 +34,13 @@ module.exports = (express, dbPromise) => {
                 res.status(200).send({ message: 'deleted room', error: null, rooms: null })
         })
 
-    router.route('/room/locate')
+    router.route('/room/locate/:playfabId')
         .post(async (req, res) => {
             console.log('GET        /api/room   -   get valid room');
+
+            console.log({ body: req.body });
+            console.log({ params: req.params });
+
             const room = await RoomActions.getRoom(req, dbPromise);
 
             console.log(room);
