@@ -49,6 +49,9 @@ app.use(bodyParser.json())
 app.use('/', express.static(path.join(__dirname, "static")));
 app.use('/colyseus', monitor(gameServer));
 
+// AUTH ROUTES
+app.use('/', require('./routes/auth')(express));
+
 // API ROUTES
 app.use('/api', require('./routes/room')(express, dbPromise));
 app.use('/api', require('./routes/user')(express, dbPromise));

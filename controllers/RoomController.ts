@@ -1,8 +1,8 @@
 import { updateUser } from './UserController';
 
-const getRoom = async (params, dbPromise) => {
+const getRoom = async (body, dbPromise) => {
     const db = await dbPromise;
-    let { playfabId, scene, zone, type } = params;
+    let { playfabId, scene, zone, type } = body;
 
     try {
         const rooms = await db.all(`SELECT id, maxSize FROM Room WHERE scene = '${scene}' AND zone = '${zone}'`);
@@ -37,6 +37,8 @@ const getRoom = async (params, dbPromise) => {
             await createRoom({ id: newId, scene, zone, maxSize: "15", type }, dbPromise);
             roomToJoin = { playfabId, isOnline: false, roomId: newId, roomScene: scene, roomZone: zone };
         }
+        console.log(roomToJoin);
+
         await updateUser(roomToJoin, dbPromise);
 
         return scene + "_" + zone + "#" + roomToJoin.roomId;

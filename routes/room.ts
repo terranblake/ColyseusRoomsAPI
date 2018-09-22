@@ -17,9 +17,7 @@ module.exports = (express, dbPromise) => {
             console.log('POST       /api/room   -   create room')
             const result = await RoomActions.createRoom(req.body, dbPromise);
 
-            if (result == 2)
-                res.status(400).send({ message: null, error: 'scene, zone, id and type are required', rooms: null });
-            else if (result == 1)
+            if (result == 1)
                 res.status(400).send({ message: null, error: 'that room already exists', rooms: null })
             else
                 res.status(200).send({ message: 'room created', error: null, rooms: null });
@@ -34,12 +32,10 @@ module.exports = (express, dbPromise) => {
                 res.status(200).send({ message: 'deleted room', error: null, rooms: null })
         })
 
-    router.route('/room/:playfabId/:scene/:zone/:type')
-        .get(async (req, res) => {
+    router.route('/room/locate')
+        .post(async (req, res) => {
             console.log('GET        /api/room   -   get valid room');
-            const room = await RoomActions.getRoom(req.params, dbPromise);
-
-            console.log(req.params);
+            const room = await RoomActions.getRoom(req.body, dbPromise);
 
             if (room)
                 res.status(200).send({ message: 'room(s) found', error: null, room })

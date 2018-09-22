@@ -33,5 +33,5 @@ CREATE TABLE IF NOT EXISTS Room (
 -- Down
 --------------------------------------------------------------------------------
 
-DROP TABLE User;
-DROP TABLE Room;
+-- DROP TABLE User;
+-- DROP TABLE Room;

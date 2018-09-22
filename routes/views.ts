@@ -1,4 +1,4 @@
-import { UserActions, RoomActions } from '../controllers';
+import { UserActions, RoomActions, PlayfabActions } from '../controllers';
 
 module.exports = (express, dbPromise) => {
     const router = express.Router();
@@ -16,6 +16,13 @@ module.exports = (express, dbPromise) => {
             const users = await UserActions.getAllUsers(dbPromise);
 
             res.status(200).render('users', users);
+        })
+
+    router.route('/info')
+        .post(async (req, res) => {
+            console.log('POST        /info      -   view user account info');
+
+            await PlayfabActions.retrieveAccountInfo(req.body.PlayFabId, res);
         })
 
     router.route('/rooms')

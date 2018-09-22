@@ -26,6 +26,7 @@
     "express-handlebars": "^3.0.0",
     "jsonwebtoken": "^8.3.0",
     "nodemon": "^1.11.0",
+    "playfab-sdk": "^2.13.180917",
     "sqlite": "^3.0.0",
     "superagent": "^3.8.1"
   },
