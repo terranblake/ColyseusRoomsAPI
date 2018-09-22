@@ -37,7 +37,7 @@ module.exports = (express, dbPromise) => {
     router.route('/room/locate')
         .post(async (req, res) => {
             console.log('GET        /api/room   -   get valid room');
-            const room = await RoomActions.getRoom(req.params, dbPromise);
+            const room = await RoomActions.getRoom(req.body, dbPromise);
 
             console.log(room);
 
