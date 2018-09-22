@@ -5,43 +5,26 @@ const getRoom = async (body, dbPromise) => {
     let { playfabId, scene, zone, type } = body;
 
     try {
-        const rooms = await db.all(`SELECT id, maxSize FROM Room WHERE scene = '${scene}' AND zone = '${zone}'`);
-
-        console.log(rooms)
+        const rooms = await db.all(`SELECT * FROM Room WHERE scene = '${scene}' AND zone = '${zone}'`);
         let roomToJoin;
-        let foundRoom = false;
 
-        if (rooms)
-            rooms.forEach(async room => {
+        if (rooms) {
+            roomToJoin = await rooms.find(async room => {
                 const userCount = await db.all(`SELECT COUNT(*) FROM User WHERE roomScene = '${scene}' AND roomZone = '${zone}'`);
-
-                if (userCount[0]['COUNT(*)'] < parseInt(room.maxSize) && foundRoom == false) {
-                    roomToJoin = { playfabId, isOnline: false, roomId: room.id, roomScene: scene, roomZone: zone };
-                    foundRoom = true;
-
-                    console.log({
-                        room_not_full: room
-                    });
-
-                    return;
-                }
-
-                console.log({
-                    room_is_full: room
-                });
+                return (userCount[0]['COUNT(*)'] < parseInt(room.maxSize))
             });
+        }
 
-        if (foundRoom == false) {
+        if (typeof roomToJoin == 'undefined') {
             let newId = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString()
 
             await createRoom({ id: newId, scene, zone, maxSize: "15", type }, dbPromise);
-            roomToJoin = { playfabId, isOnline: false, roomId: newId, roomScene: scene, roomZone: zone };
+            roomToJoin = { playfabId, isOnline: true, id: newId, scene: scene, zone: zone };
         }
-        console.log(roomToJoin);
 
-        await updateUser(roomToJoin, dbPromise);
+        await updateUser({ playfabId, isOnline: true, id: roomToJoin.id, scene: roomToJoin.scene, zone: roomToJoin.zone }, dbPromise);
 
-        return scene + "_" + zone + "#" + roomToJoin.roomId;
+        return scene + "_" + zone + "#" + roomToJoin.id;
     } catch (err) {
         throw err;
     }
@@ -74,10 +57,6 @@ const getAllRooms = async (dbPromise) => {
 const createRoom = async (body, dbPromise) => {
     let { id, scene, zone, maxSize, type } = body;
 
-    console.log({
-        to_create: body
-    });
-
     if (id && scene && zone && type) {
         const db = await dbPromise;
         const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`);
@@ -94,10 +73,6 @@ const createRoom = async (body, dbPromise) => {
 
 const deleteRoom = async (body, dbPromise) => {
     let { id, scene, zone } = body;
-
-    console.log({
-        to_delete: body
-    });
 
     let db = await dbPromise;
     let foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`);

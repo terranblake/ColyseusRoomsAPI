@@ -24,6 +24,8 @@ module.exports = (express, dbPromise) => {
         })
         .delete(async (req, res) => {
             console.log('DELETE     /api/room   -   delete room')
+            console.log(req.body);
+
             const result = await RoomActions.deleteRoom(req.body, dbPromise);
 
             if (result == 1)
@@ -35,7 +37,9 @@ module.exports = (express, dbPromise) => {
     router.route('/room/locate')
         .post(async (req, res) => {
             console.log('GET        /api/room   -   get valid room');
-            const room = await RoomActions.getRoom(req.body, dbPromise);
+            const room = await RoomActions.getRoom(req.params, dbPromise);
+
+            console.log(room);
 
             if (room)
                 res.status(200).send({ message: 'room(s) found', error: null, room })

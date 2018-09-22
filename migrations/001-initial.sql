@@ -24,8 +24,11 @@ CREATE TABLE IF NOT EXISTS Room (
   updatedAt     TEXT
 );
 
--- INSERT INTO Room (id, scene, zone, maxSize, type) VALUES (1234, 'Room', 'Zone', 15, 'default_room');
--- INSERT INTO User (playfabId, displayName) VALUES (1234, 'display.name');
+-- INSERT INTO Room (id, scene, zone, maxSize, type) VALUES ('0001', 'VibrantVale', 'Spawn', 15, 'default_room');
+-- INSERT INTO Room (id, scene, zone, maxSize, type) VALUES ('0002', 'VibrantVale', 'Park', 15, 'default_room');
+
+-- INSERT INTO User (playfabId, displayName, roomId, roomScene, roomZone) VALUES ('0001', 'display.name', '0001', 'VibrantVale', 'Spawn');
+-- INSERT INTO User (playfabId, displayName, roomId, roomScene, roomZone) VALUES ('0002', 'display.name', '0002', 'VibrantVale', 'Park');
 
 -- SELECT * FROM User;
 

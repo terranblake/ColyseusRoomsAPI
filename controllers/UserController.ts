@@ -43,15 +43,11 @@ const createUser = async (body, dbPromise) => {
 }
 
 const updateUser = async (body, dbPromise) => {
-    let { playfabId, isOnline, roomId, roomScene, roomZone } = body;
-
-    console.log({
-        to_update: body
-    });
+    let { playfabId, isOnline, id, scene, zone } = body;
 
     try {
         const db = await dbPromise;
-        const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${roomId}' AND scene = '${roomScene}' AND zone = '${roomZone}'`);
+        const foundRoom = await db.get(`SELECT id FROM Room WHERE id = '${id}' AND scene = '${scene}' AND zone = '${zone}'`);
         const foundUser = await db.get(`SELECT playfabId, roomScene, roomZone, roomId FROM User WHERE playfabId = '${playfabId}'`);
         const dateNow = Date.now();
 
@@ -59,9 +55,9 @@ const updateUser = async (body, dbPromise) => {
             const result = await db.get(`
                 UPDATE User
                 SET isOnline =  '${parseInt(isOnline) == 1}',
-                    roomId =    '${roomId}',
-                    roomScene = '${roomScene}',
-                    roomZone =  '${roomZone}',
+                    roomId =    '${id}',
+                    roomScene = '${scene}',
+                    roomZone =  '${zone}',
                     updatedAt = '${dateNow}'
                 WHERE
                     playfabId = '${playfabId}'
@@ -80,8 +76,10 @@ const updateUser = async (body, dbPromise) => {
 
             return 0;
         }
-        else
+        else {
+            console.log('unable to find user or room');
             return 1;
+        }
     } catch (err) {
         throw err;
     }

@@ -6,7 +6,6 @@ module.exports = (express, dbPromise) => {
     router.route('/')
         .get(async (req, res) => {
             console.log('GET        /           -   view home');
-
             res.status(200).render('home');
         })
 
@@ -14,7 +13,6 @@ module.exports = (express, dbPromise) => {
         .get(async (req, res) => {
             console.log('GET        /users      -   view all users');
             const users = await UserActions.getAllUsers(dbPromise);
-
             res.status(200).render('users', users);
         })
 
@@ -29,7 +27,6 @@ module.exports = (express, dbPromise) => {
         .get(async (req, res) => {
             console.log('GET        /rooms      -   view all rooms');
             const rooms = await RoomActions.getAllRooms(dbPromise);
-
             res.status(200).render('rooms', rooms);
         })
 
