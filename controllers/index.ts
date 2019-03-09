@@ -1,7 +1,7 @@
-import * as UserActions from './UserController';
-import * as RoomActions from './RoomController';
-import * as AuthActions from './AuthController';
-import * as PlayfabActions from './PlayfabController';
+import * as UserActions from './user';
+import * as RoomActions from './room';
+import * as AuthActions from './auth';
+import * as PlayfabActions from './playfab';
 
 export {
     UserActions,

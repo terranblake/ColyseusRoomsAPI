@@ -1,4 +1,4 @@
-import { deleteRoom } from './RoomController';
+import { deleteRoom } from './room';
 
 const getUser = async (searchBy, value, dbPromise) => {
     try {

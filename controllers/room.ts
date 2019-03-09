@@ -1,4 +1,4 @@
-import { updateUser } from './UserController';
+import { updateUser } from './user';
 
 const getRoom = async (req, dbPromise) => {
     const db = await dbPromise;
