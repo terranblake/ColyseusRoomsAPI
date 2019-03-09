@@ -5,7 +5,6 @@ module.exports = (express, dbPromise) => {
 
     router.route('/user')
         .get(async (req, res) => {
-            console.log('GET        /api/user   -   get all users')
             const users = await UserActions.getAllUsers(dbPromise);
 
             if (users)
@@ -14,7 +13,6 @@ module.exports = (express, dbPromise) => {
                 res.status(400).send({ message: 'no users found', error: null, users: null })
         })
         .post(async (req, res) => {
-            console.log('POST       /api/user   -   create user')
             const result = await UserActions.createUser(req.body, dbPromise);
 
             if (result == 1)
@@ -23,7 +21,6 @@ module.exports = (express, dbPromise) => {
                 res.status(200).send({ message: 'added new user to database', error: null, users: null });
         })
         .put(async (req, res) => {
-            console.log('PUT        /api/user   -   update user')
             const result = await UserActions.updateUser(req.body, dbPromise);
 
             if (result == 1)
@@ -34,7 +31,6 @@ module.exports = (express, dbPromise) => {
 
     router.route('/user/:searchBy/:value')
         .get(async (req, res) => {
-            console.log('GET        /api/user   -   get user by property');
             const user = await UserActions.getUser(
                 req.params.searchBy,
                 req.params.value,

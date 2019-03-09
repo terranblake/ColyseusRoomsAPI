@@ -21,7 +21,6 @@ const dbPromise = Promise.resolve()
   .then(() => sqlite.open('./db.sqlite', { promise: Promise }))
   .then(db => db.migrate({ force: 'last' }));
 
-// Attach WebSocket Server on HTTP Server.
 const gameServer = new Server({
   server: createServer(app)
 });
